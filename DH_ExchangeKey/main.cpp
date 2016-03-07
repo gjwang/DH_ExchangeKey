@@ -49,10 +49,10 @@ int main(int argc, const char * argv[]) {
     std::cout << "shareA=" << shareA << " == shareB=" << shareB << std::endl;
     
     for (int count=0; count<100; count++) {
-        int alicePrivateKey = rand()%15 + 1;
+        int alicePrivateKey = rand()%14 + 1;
         int alicePubliceKey = generatePublicKey(alicePrivateKey, g, p);
         
-        int bobPrivateKey = rand()%15 + 1;
+        int bobPrivateKey = rand()%14 + 1;
         int bobPubliceKey = generatePublicKey(bobPrivateKey, g, p);
         
         int aliceShareKey = generateSharedKey(bobPubliceKey, alicePrivateKey, p);
@@ -61,6 +61,21 @@ int main(int argc, const char * argv[]) {
         std::cout << "aliceShareKey=" << aliceShareKey <<
                  " == bobShareKey=" << bobShareKey << std::endl;
         assert(aliceShareKey == bobShareKey);
+    }
+    
+    for (int alicePriv=1; alicePriv<=14; alicePriv++) {
+        int alicePub = generatePublicKey(alicePriv, g, p);
+        
+        for (int bobPriv=1; bobPriv<=14; bobPriv++) {
+            int bobPub = generatePublicKey(bobPriv, g, p);
+            
+            int aliceShareKey = generateSharedKey(bobPub, alicePriv, p);
+            int bobShareKey = generateSharedKey(alicePub, bobPriv, p);
+
+            std::cout << "alicePrive=" << alicePriv << " bobPriv=" << bobPriv <<
+            ", aliceShareKey=" << aliceShareKey <<" == bobShareKey=" << bobShareKey << std::endl;
+            assert(aliceShareKey == bobShareKey);
+        }
     }
     
     return 0;
